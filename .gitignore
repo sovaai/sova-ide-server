@@ -25,5 +25,5 @@ yarn-error.log*
 .idea
 
 dist
-server
+/server
 certs

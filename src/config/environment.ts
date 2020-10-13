@@ -23,12 +23,6 @@ const allowedOrigins = [
   'http://localhost:5000',
   'http://localhost',
   'http://localhost:443',
-  'http://armnx-ui.k8s.nanosemantics.tech',
-  'http://armnx-ui-dev.nanosemantics.cloud',
-  'http://armnx-ui-demo.nanosemantics.cloud',
-  'http://ui:5000',
-  'http://esplus-ide-ui.mcs',
-  'http://89.208.221.191',
 ]
 const checkOrigin = (origin, callback) => {
   if (!origin) return callback(null, true)

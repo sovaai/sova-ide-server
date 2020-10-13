@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { profilesDefaultConfig } from '../../../config/serviceTemplates/serviceTemplatesConfig'
+import { userData } from '../../../middleware/mocks/user'
 import { profilesParamsMock } from '../../../mocks/serviceProfilesParams'
 
 const production = process.env.NODE_ENV === 'production'
@@ -8,7 +9,7 @@ const API_URL = process.env.TEMPLATES_API_URL
 
 const configCreator = (config: { method: String; params?: any; id: Number }) => {
   const [_, methodKey] = config.method.split('.')
-  return profilesDefaultConfig.mapEntries(entry => {
+  return profilesDefaultConfig.mapEntries((entry) => {
     const [key] = entry
     if (!config.params && key === 'params') {
       return [key, profilesParamsMock.get(methodKey)]
@@ -18,23 +19,15 @@ const configCreator = (config: { method: String; params?: any; id: Number }) => 
   })
 }
 
-export const userCurrentQuery = async token => {
+export const userCurrentQuery = async (token) => {
   try {
-    const response = await axios.get(
-      `${API_USERS_URL}users/me`,
-      {
-        headers: {
-          authorization: token,
-        },
-      }
-    )
-    return response.data
+    return userData
   } catch (error) {
     console.log(error)
   }
 }
 
-export const userProfilesQuery = async config => {
+export const userProfilesQuery = async (config) => {
   try {
     const response = await axios.post(API_URL, configCreator(config).toJS())
     return response.data.result
@@ -43,7 +36,7 @@ export const userProfilesQuery = async config => {
   }
 }
 
-export const userProfilesCreateMutation = async config => {
+export const userProfilesCreateMutation = async (config) => {
   try {
     const response = await axios.post(API_URL, configCreator(config).toJS())
     return response.data.result
@@ -52,7 +45,7 @@ export const userProfilesCreateMutation = async config => {
   }
 }
 
-export const userProfilesRemoveMutation = async config => {
+export const userProfilesRemoveMutation = async (config) => {
   try {
     const response = await axios.post(API_URL, configCreator(config).toJS())
     return response.data.result

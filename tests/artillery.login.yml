@@ -1,0 +1,16 @@
+config:
+  target: 'https://localhost:8443'
+  tls:
+    rejectUnauthorized: false
+  phases:
+    - duration: 2
+      arrivalRate: 1
+  defaults:
+    headers:
+scenarios:
+  - flow:
+      - post:
+          url: '/login'
+          json:
+            password: 'admin12345'
+            username: 'admin'

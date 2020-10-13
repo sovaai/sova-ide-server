@@ -1,0 +1,36 @@
+kind: Module
+description: ArmNX App server container
+name: armnx-server-dev
+type: container
+allowPublish: false
+buildArgs:
+  TEMPLATES_API_URL: ${var.TEMPLATES_API_URL}
+  SEARCH_API_URL: ${var.SEARCH_API_URL}
+  STAPI_AUTH_URL: ${var.STAPI_AUTH_URL}
+  STAPI_AUTH_URL_DEV: ${var.STAPI_AUTH_URL_DEV}
+  CHAT_API_URL: ${var.CHAT_API_URL}
+  APOLLO_INTROSPECTION: ${var.APOLLO_INTROSPECTION}
+  APOLLO_PLAYGROUND: ${var.APOLLO_PLAYGROUND}
+  PORT: ${var.PORT}
+  PORT_DEV: ${var.PORT_DEV}
+services:
+  - name: armnx-server-dev
+    disabled: ${local.env.STRATEGY && local.env.STRATEGY != 'demo' && local.env.STRATEGY != 'dev' && local.env.STRATEGY != 'stage'}
+    args: ['node', 'server/main']
+    ports:
+      - name: http
+        containerPort: 5000
+    ingresses:
+      - path: /
+        port: http
+        hostname: armnx-server-${local.env.STRATEGY || 'dev'}.nanosemantics.cloud
+  - name: belarusbank-ide-server
+    disabled: ${local.env.STRATEGY != 'belarusbank'}
+    args: ['node', 'server/main']
+    ports:
+      - name: http
+        containerPort: 5000
+    ingresses:
+      - path: /
+        port: http
+        hostname: belarusbank-ide-server.nanosemantics.cloud

@@ -1,0 +1,13 @@
+config:
+  target: 'https://localhost:8443'
+  tls:
+    rejectUnauthorized: false
+  phases:
+    - duration: 10
+      arrivalRate: 2
+  defaults:
+    headers:
+scenarios:
+  - flow:
+      - get:
+          url: '/'

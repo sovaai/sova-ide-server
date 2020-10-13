@@ -1,0 +1,57 @@
+kind: Module
+description: ArmNX App server container
+name: armnx-server-dev
+type: container
+disabled: ${local.env.STRATEGY && local.env.STRATEGY != 'demo' && local.env.STRATEGY != 'dev' && local.env.STRATEGY != 'stage'}
+include: ['*']
+allowPublish: false
+buildArgs:
+  TEMPLATES_API_URL: ${var.TEMPLATES_API_URL}
+  SEARCH_API_URL: ${var.SEARCH_API_URL}
+  STAPI_AUTH_URL: ${var.STAPI_AUTH_URL}
+  STAPI_AUTH_URL_DEV: ${var.STAPI_AUTH_URL_DEV}
+  CHAT_API_URL: ${var.CHAT_API_URL}
+  APOLLO_INTROSPECTION: ${var.APOLLO_INTROSPECTION}
+  APOLLO_PLAYGROUND: ${var.APOLLO_PLAYGROUND}
+  PORT: ${var.PORT}
+  PORT_DEV: ${var.PORT_DEV}
+services:
+  - name: armnx-server-dev
+    args: ['node', 'server/main']
+    ports:
+      - name: http
+        containerPort: 5000
+    ingresses:
+      - path: /
+        port: http
+        hostname: armnx-server-${local.env.STRATEGY || 'dev'}.nanosemantics.cloud
+
+---
+
+kind: Module
+description: ArmNX App server container for Belarusbank
+name: belarusbank-ide-server
+type: container
+disabled: ${local.env.STRATEGY != 'belarusbank'}
+include: ['*']
+allowPublish: false
+buildArgs:
+  TEMPLATES_API_URL: ${var.TEMPLATES_API_URL}
+  SEARCH_API_URL: ${var.SEARCH_API_URL}
+  STAPI_AUTH_URL: ${var.STAPI_AUTH_URL}
+  STAPI_AUTH_URL_DEV: ${var.STAPI_AUTH_URL_DEV}
+  CHAT_API_URL: ${var.CHAT_API_URL}
+  APOLLO_INTROSPECTION: ${var.APOLLO_INTROSPECTION}
+  APOLLO_PLAYGROUND: ${var.APOLLO_PLAYGROUND}
+  PORT: ${var.PORT}
+  PORT_DEV: ${var.PORT_DEV}
+services:
+  - name: belarusbank-ide-server
+    args: ['node', 'server/main']
+    ports:
+      - name: http
+        containerPort: 5000
+    ingresses:
+      - path: /
+        port: http
+        hostname: belarusbank-ide-server.nanosemantics.cloud

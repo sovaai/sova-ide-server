@@ -1,0 +1,109 @@
+stages:
+  - build-dev
+  - build-stage
+  - build-prod
+  - deploy-dev
+  - deploy-stage
+  - deploy-prod
+
+variables:
+  NLAB_IDE_SERVER_NAME: armnx-server
+  NLAB_IDE_SERVER_NAME_DEV: armnx-server-dev
+  NLAB_IDE_SERVER_NAME_STAGE: armnx-server-stage
+
+default:
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - export NLAB_IDE_SERVER_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - export NLAB_IDE_IMAGE=$CI_REGISTRY_IMAGE:$NLAB_IDE_SERVER_VERSION
+    - export NLAB_IDE_IMAGE_DEV=$CI_REGISTRY_IMAGE:$NLAB_IDE_SERVER_VERSION-dev
+    - export NLAB_IDE_IMAGE_STAGE=$CI_REGISTRY_IMAGE:$NLAB_IDE_SERVER_VERSION-stage
+
+build-dev:
+  stage: build-dev
+  script:
+    - docker build -t $NLAB_IDE_IMAGE_DEV .
+    - docker push $NLAB_IDE_IMAGE_DEV
+  only:
+    - master
+
+build-stage:
+  stage: build-stage
+  script:
+    - docker build -t $NLAB_IDE_IMAGE_STAGE .
+    - docker push $NLAB_IDE_IMAGE_STAGE
+  only:
+    - tags
+  except:
+    - branches
+
+build-prod:
+  stage: build-prod
+  script:
+    - docker build -t $NLAB_IDE_IMAGE .
+    - docker push $NLAB_IDE_IMAGE
+  only:
+    - tags
+  except:
+    - branches
+
+deploy-dev:
+  stage: deploy-dev
+  environment:
+    name: dev
+  script:
+    #- helm --kubeconfig $K8S_MIPT_CONFIG uninstall $NLAB_IDE_SERVER_NAME_DEV
+    - helm --kubeconfig $K8S_MIPT_CONFIG upgrade --install --atomic $NLAB_IDE_SERVER_NAME_DEV
+      --set namespace="$ARMNX_IDE_NAMESPACE_DEV"
+      --set image.tag="$NLAB_IDE_SERVER_VERSION-dev"
+      --set ingress.hosts[0].host=$ARMNX_SERVER_HOST_DEV,ingress.hosts[0].paths={\"/\"}
+      --set configMapValues.TEMPLATES_API_URL="$TEMPLATES_API_URL_DEV"
+      --set configMapValues.CHAT_API_URL="$CHAT_API_URL_DEV"
+      --set configMapValues.SEARCH_API_URL="$SEARCH_API_URL_DEV"
+      --set configMapValues.STAPI_AUTH_URL="$STAPI_AUTH_URL_DEV"
+      ./helm
+  #   - kubectl --kubeconfig $K8S_MIPT_CONFIG get ns
+  #   - kubectl --kubeconfig $K8S_MIPT_CONFIG --namespace=$ARMNX_IDE_NAMESPACE_DEV get pods
+  only:
+    - master
+
+deploy-stage:
+  stage: deploy-stage
+  environment:
+    name: stage
+  script:
+    #- helm --kubeconfig $K8S_MIPT_CONFIG uninstall $NLAB_IDE_SERVER_NAME_STAGE
+    - helm --kubeconfig $K8S_MIPT_CONFIG upgrade --install --atomic $NLAB_IDE_SERVER_NAME_STAGE
+      --set namespace="$ARMNX_IDE_NAMESPACE_STAGE"
+      --set image.tag="$NLAB_IDE_SERVER_VERSION-stage"
+      --set ingress.hosts[0].host=$ARMNX_SERVER_HOST_STAGE,ingress.hosts[0].paths={\"/\"}
+      --set configMapValues.TEMPLATES_API_URL="$TEMPLATES_API_URL_STAGE"
+      --set configMapValues.CHAT_API_URL="$CHAT_API_URL_STAGE"
+      --set configMapValues.SEARCH_API_URL="$SEARCH_API_URL_STAGE"
+      --set configMapValues.STAPI_AUTH_URL="$STAPI_AUTH_URL_STAGE"
+      ./helm
+  only:
+    - tags
+  except:
+    - branches
+
+deploy-prod:
+  stage: deploy-prod
+  environment:
+    name: prod
+  script:
+    #- helm --kubeconfig $K8S_MIPT_CONFIG uninstall $NLAB_IDE_SERVER_NAME
+    - helm --kubeconfig $K8S_MIPT_CONFIG upgrade --install --atomic $NLAB_IDE_SERVER_NAME
+      --set namespace="$ARMNX_IDE_NAMESPACE_PROD"
+      --set image.tag="$NLAB_IDE_SERVER_VERSION"
+      --set ingress.hosts[0].host=$ARMNX_SERVER_HOST_PROD,ingress.hosts[0].paths={\"/\"}
+      --set configMapValues.TEMPLATES_API_URL="$TEMPLATES_API_URL_PROD"
+      --set configMapValues.CHAT_API_URL="$CHAT_API_URL_PROD"
+      --set configMapValues.SEARCH_API_URL="$SEARCH_API_URL_PROD"
+      --set configMapValues.STAPI_AUTH_URL="$STAPI_AUTH_URL_PROD"
+      ./helm
+  when: manual
+  only:
+    - tags
+  except:
+    - branches

@@ -1,0 +1,11 @@
+{
+  /*   "files.associations": {
+      "*.css": "postcss"
+    } */
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#000",
+    "titleBar.inactiveForeground": "#000000CC",
+    "titleBar.activeBackground": "#2F80ED",
+    "titleBar.inactiveBackground": "#2F80ED"
+  }
+}

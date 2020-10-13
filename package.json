@@ -1,0 +1,87 @@
+{
+  "name": "arm2-app-server",
+  "version": "1.0.1",
+  "description": "Main Data Server for ARM 2",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config webpack.$NODE_ENV.js",
+    "start": "cross-env NODE_ENV=development npm run build & nodemon --require dotenv/config server/main",
+    "build:production": "cross-env NODE_ENV=production npm run build",
+    "start:production": "node server/main",
+    "commit": "git-cz",
+    "commit-all": "git add . && git-cz",
+    "changelog": "./node_modules/.bin/conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "start_pm2": "cross-env NODE_ENV=production pm2 start server/main.js",
+    "version": "echo $npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.nanosemantics.ru:arm2/app-server.git"
+  },
+  "keywords": [
+    "Node",
+    "App",
+    "Server",
+    "GraphQL",
+    "Apollo Server",
+    "Typescript"
+  ],
+  "author": "Александр Аргунов <argunov@nanosemantics.ai>",
+  "contributors": [
+    "Илья Маков <makov@nanosemantics.ai>",
+    "Роман Карпов <karpov@nanosemantics.ai>"
+  ],
+  "license": "ISC",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.6",
+    "apollo-server-express": "^2.9.6",
+    "axios": "^0.19.0",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "graphql": "^14.5.8",
+    "graphql-import": "^0.7.1",
+    "graphql-tools": "^4.0.5",
+    "graphql-type-json": "^0.3.1",
+    "helmet": "^3.21.1",
+    "http-errors": "^1.7.3",
+    "immutable": "^4.0.0-rc.12",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "stream-to-array": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.1",
+    "@types/express-session": "^1.15.15",
+    "@types/passport": "^1.0.1",
+    "@types/stream-to-array": "^2.3.0",
+    "@types/webpack-env": "^1.14.1",
+    "clean-webpack-plugin": "^2.0.2",
+    "concurrently": "^4.1.2",
+    "conventional-changelog-cli": "^2.0.34",
+    "copy-webpack-plugin": "^5.0.4",
+    "cross-env": "^3.0.2",
+    "cz-conventional-changelog": "^2.1.0",
+    "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2"
+  }
+}

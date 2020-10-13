@@ -102,8 +102,7 @@ export const userData = {
   ],
 }
 
-export const jwtTOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjAyNTIzODUxLCJleHAiOjE2MDUxMTU4NTF9.x-kh7F9GUU4031BdvTD7HBPlKHMqSPbKIxvAbF8iBSw'
+export const jwtTOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.token'
 
 export const localAuthUser = {
   username: 'admin',

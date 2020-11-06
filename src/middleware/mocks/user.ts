@@ -1,7 +1,7 @@
 export const userData = {
   id: 1,
   username: 'admin',
-  email: 'admin@nanosemantics.ai',
+  email: 'admin@example',
   provider: 'local',
   confirmed: true,
   blocked: false,

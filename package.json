@@ -34,7 +34,7 @@
     "Никита Калинников <kalinnikov@nanosemantics.ai>",
     "Рудольф Бехштедт <bechstedt@nanosemantics.ai>"
   ],
-  "license": "ISC",
+  "license": "Apache 2.0",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

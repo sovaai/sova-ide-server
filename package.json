@@ -15,10 +15,6 @@
     "start_pm2": "cross-env NODE_ENV=production pm2 start server/main.js",
     "version": "echo $npm_package_version"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.nanosemantics.ru:sova/ide/app/sova-ide-server.git"
-  },
   "keywords": [
     "Node",
     "App",
@@ -27,13 +23,11 @@
     "Apollo Server",
     "Typescript"
   ],
-  "author": "Александр Аргунов <argunov@nanosemantics.ai>",
-  "contributors": [
-    "Роман Карпов <karpov@nanosemantics.ai>",
-    "Инга Гулина <gulina@nanosemantics.ai>",
-    "Никита Калинников <kalinnikov@nanosemantics.ai>",
-    "Рудольф Бехштедт <bechstedt@nanosemantics.ai>"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.nanosemantics.ru/sova/sova-ide-server"
+  },
+  "author": "SOVA.AI <support@sova.ai>",
   "license": "Apache 2.0",
   "config": {
     "commitizen": {
